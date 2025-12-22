@@ -6,6 +6,7 @@ import VisitorsTable from './components/VisitorsTable'
 function App() {
   const [visitors, setVisitors] = useState([])
   const [loading, setLoading] = useState(true)
+  const [activeView, setActiveView] = useState('list') // 'list' or 'form'
 
   // Fetch visitors from API
   const fetchVisitors = async () => {
@@ -31,6 +32,7 @@ function App() {
 
   const handleVisitorAdded = () => {
     fetchVisitors()
+    setActiveView('list')
   }
 
   const handleVisitorDeleted = () => {
@@ -42,25 +44,46 @@ function App() {
       <header>
         <h1>מערכת ניהול מבקרים</h1>
         <p>אלטרה - בקרת ביטחון ואישור מבקרים</p>
+
+        <div className="view-toggle">
+          <button
+            type="button"
+            className={`toggle-btn ${activeView === 'form' ? 'toggle-btn-active' : ''}`}
+            onClick={() => setActiveView('form')}
+          >
+            הוסף ביקור חדש
+          </button>
+          <button
+            type="button"
+            className={`toggle-btn ${activeView === 'list' ? 'toggle-btn-active' : ''}`}
+            onClick={() => setActiveView('list')}
+          >
+            הצג רשימת מבקרים
+          </button>
+        </div>
       </header>
 
-      <div className="content-wrapper">
-        <section className="form-section">
-          <h2>טופס רישום מבקר</h2>
-          <VisitorForm onVisitorAdded={handleVisitorAdded} />
-        </section>
+      <div className="content-wrapper single-column">
+        {activeView === 'form' && (
+          <section className="form-section">
+            <h2>טופס רישום מבקר</h2>
+            <VisitorForm onVisitorAdded={handleVisitorAdded} />
+          </section>
+        )}
 
-        <section className="table-section">
-          <h2>רשימת מבקרים</h2>
-          {loading ? (
-            <div className="loading">טוען נתונים...</div>
-          ) : (
-            <VisitorsTable 
-              visitors={visitors} 
-              onVisitorDeleted={handleVisitorDeleted}
-            />
-          )}
-        </section>
+        {activeView === 'list' && (
+          <section className="table-section">
+            <h2>רשימת מבקרים</h2>
+            {loading ? (
+              <div className="loading">טוען נתונים...</div>
+            ) : (
+              <VisitorsTable 
+                visitors={visitors} 
+                onVisitorDeleted={handleVisitorDeleted}
+              />
+            )}
+          </section>
+        )}
       </div>
     </div>
   )
