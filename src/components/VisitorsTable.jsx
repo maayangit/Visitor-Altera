@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 const visitTypeLabels = {
   'private': 'אורח פרטי',
@@ -15,6 +15,16 @@ const gateLabels = {
 
 function VisitorsTable({ visitors, onVisitorDeleted }) {
   const [deletingId, setDeletingId] = useState(null)
+  const [adminCode, setAdminCode] = useState('')
+  const [isAdmin, setIsAdmin] = useState(false)
+
+  useEffect(() => {
+    const saved = sessionStorage.getItem('adminCode')
+    if (saved) {
+      setAdminCode(saved)
+      setIsAdmin(true)
+    }
+  }, [])
 
   const formatDate = (dateString) => {
     const date = new Date(dateString)
@@ -25,7 +35,22 @@ function VisitorsTable({ visitors, onVisitorDeleted }) {
     })
   }
 
+  const handleCheckAdmin = () => {
+    if (!adminCode) {
+      alert('יש להזין קוד מנהל')
+      return
+    }
+    // במערכת אמיתית מומלץ לאמת מהשרת. כאן אנו בודקים רק בצד הלקוח
+    setIsAdmin(true)
+    sessionStorage.setItem('adminCode', adminCode)
+  }
+
   const handleDelete = async (id) => {
+    if (!isAdmin) {
+      alert('רק מנהלים יכולים למחוק רשומות. נא להזין קוד מנהל.')
+      return
+    }
+
     if (!window.confirm('האם אתה בטוח שברצונך למחוק את המבקר הזה?')) {
       return
     }
@@ -34,9 +59,14 @@ function VisitorsTable({ visitors, onVisitorDeleted }) {
     try {
       const response = await fetch(`/api/visitors/${id}`, {
         method: 'DELETE',
+        headers: {
+          'x-admin-token': adminCode,
+        },
       })
 
-      if (response.ok) {
+      if (response.status === 403) {
+        alert('קוד מנהל שגוי או חסר. אין הרשאה למחוק רשומות.')
+      } else if (response.ok) {
         onVisitorDeleted()
       } else {
         alert('שגיאה במחיקת המבקר')
@@ -62,6 +92,18 @@ function VisitorsTable({ visitors, onVisitorDeleted }) {
 
   return (
     <div className="table-container">
+      <div className="admin-bar">
+        <input
+          type="password"
+          className="admin-input"
+          placeholder="קוד מנהל למחיקת רשומות"
+          value={adminCode}
+          onChange={(e) => setAdminCode(e.target.value)}
+        />
+        <button type="button" className="admin-btn" onClick={handleCheckAdmin}>
+          אישור
+        </button>
+      </div>
       <table>
         <thead>
           <tr>

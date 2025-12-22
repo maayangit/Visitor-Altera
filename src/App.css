@@ -213,6 +213,35 @@ tbody td {
     cursor: not-allowed;
 }
 
+.admin-bar {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.admin-input {
+    flex: 1;
+    padding: 8px 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 0.9em;
+}
+
+.admin-btn {
+    padding: 8px 12px;
+    border-radius: 6px;
+    border: none;
+    background: #4b5bd6;
+    color: white;
+    font-size: 0.9em;
+    cursor: pointer;
+}
+
+.admin-btn:hover {
+    background: #3a48ad;
+}
+
 .visit-type-badge {
     display: inline-block;
     padding: 5px 12px;
