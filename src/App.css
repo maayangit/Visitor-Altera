@@ -1,6 +1,7 @@
 .container {
     max-width: 1400px;
     margin: 0 auto;
+    padding: 0 10px;
 }
 
 header {
@@ -252,6 +253,92 @@ tbody td {
 
 tbody tr {
     animation: fadeIn 0.3s ease;
+}
+
+/* --- התאמות למובייל --- */
+@media (max-width: 768px) {
+    header {
+        padding: 16px;
+        margin-bottom: 16px;
+    }
+
+    header h1 {
+        font-size: 1.8em;
+    }
+
+    header p {
+        font-size: 1em;
+    }
+
+    .form-section, .table-section {
+        padding: 18px 16px;
+        border-radius: 12px;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
+    }
+
+    .form-group {
+        margin-bottom: 14px;
+    }
+
+    .form-group label {
+        font-size: 0.95em;
+    }
+
+    .form-group input,
+    .form-group select {
+        padding: 10px;
+        font-size: 0.95em;
+    }
+
+    .submit-btn {
+        padding: 12px;
+        font-size: 1em;
+    }
+
+    table {
+        font-size: 0.9em;
+    }
+
+    thead th {
+        padding: 10px 8px;
+    }
+
+    tbody td {
+        padding: 8px 6px;
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        padding: 12px;
+    }
+
+    .container {
+        padding: 0;
+    }
+
+    header {
+        padding: 12px 8px;
+    }
+
+    header h1 {
+        font-size: 1.5em;
+    }
+
+    .form-section, .table-section {
+        padding: 14px 10px;
+    }
+
+    .no-data,
+    .loading {
+        padding: 24px;
+        font-size: 1em;
+    }
+
+    .delete-btn {
+        padding: 6px 10px;
+        font-size: 0.8em;
+    }
 }
 
 
