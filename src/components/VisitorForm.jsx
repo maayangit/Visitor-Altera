@@ -9,8 +9,8 @@ const visitTypeOptions = [
 ]
 
 const gateOptions = [
-  { value: 'main', label: 'שער ראשי' },
-  { value: 'altera', label: 'שער אלטרה' }
+  { value: 'main', label: 'שער ראשי אינטל' },
+  { value: 'altera', label: 'שער דרום אלטרה' }
 ]
 
 function VisitorForm({ onVisitorAdded }) {
@@ -200,7 +200,7 @@ function VisitorForm({ onVisitorAdded }) {
       </div>
 
       <div className="form-group">
-        <label htmlFor="arrivalMethod">באיזה דרך מגיעה *</label>
+        <label htmlFor="arrivalMethod">באיזו דרך מגיע *</label>
         <select
           id="arrivalMethod"
           name="arrivalMethod"

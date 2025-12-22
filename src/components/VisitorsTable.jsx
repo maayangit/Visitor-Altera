@@ -9,8 +9,8 @@ const visitTypeLabels = {
 }
 
 const gateLabels = {
-  'main': 'שער ראשי',
-  'altera': 'שער אלטרה'
+  'main': 'שער ראשי אינטל',
+  'altera': 'שער דרום אלטרה'
 }
 
 function VisitorsTable({ visitors, onVisitorDeleted }) {
