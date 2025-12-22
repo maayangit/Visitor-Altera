@@ -22,11 +22,47 @@ header p {
     opacity: 0.9;
 }
 
+.view-toggle {
+    margin-top: 16px;
+    display: inline-flex;
+    gap: 8px;
+    background: rgba(0, 0, 0, 0.15);
+    padding: 4px;
+    border-radius: 999px;
+}
+
+.toggle-btn {
+    border: none;
+    background: transparent;
+    color: #f3f3f3;
+    padding: 8px 14px;
+    border-radius: 999px;
+    font-size: 0.95em;
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease, transform 0.1s ease;
+    white-space: nowrap;
+}
+
+.toggle-btn-active {
+    background: #ffffff;
+    color: #4b5bd6;
+    transform: translateY(-1px);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+}
+
+.toggle-btn:hover {
+    background: rgba(255, 255, 255, 0.15);
+}
+
 .content-wrapper {
     display: grid;
     grid-template-columns: 1fr 1.5fr;
     gap: 30px;
     margin-top: 30px;
+}
+
+.content-wrapper.single-column {
+    grid-template-columns: 1fr;
 }
 
 @media (max-width: 1024px) {
