@@ -16,7 +16,7 @@ const gateOptions = [
 function VisitorForm({ onVisitorAdded }) {
   const [formData, setFormData] = useState({
     visitType: '',
-    idNumber: '',
+    idNumber: '', // נשמר כ-null לשדה ה-DB הקיים
     visitDate: new Date().toISOString().split('T')[0],
     guestName: '',
     guestPhone: '',
@@ -24,31 +24,25 @@ function VisitorForm({ onVisitorAdded }) {
     escortPhone: '',
     arrivalMethod: '',
     vehicleNumber: '',
-    entryGate: ''
+    entryGate: '',
+    contractorIdNotice: false, // נשמר אך לא מוצג (מוסרים את הצ'קבוקס)
   })
 
   const [submitting, setSubmitting] = useState(false)
 
-  const showIdField = formData.visitType === 'contractor'
   const showVehicleFields = formData.arrivalMethod === 'vehicle'
 
   const handleChange = (e) => {
-    const { name, value } = e.target
+    const { name, value, type, checked } = e.target
     setFormData(prev => ({
       ...prev,
-      [name]: value
+      [name]: type === 'checkbox' ? checked : value
     }))
   }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
     
-    // Validation
-    if (formData.visitType === 'contractor' && !formData.idNumber) {
-      alert('יש למלא תעודת זהות עבור קבלן חד יומי')
-      return
-    }
-
     if (formData.arrivalMethod === 'vehicle') {
       if (!formData.vehicleNumber || !formData.entryGate) {
         alert('יש למלא את כל שדות הרכב')
@@ -66,7 +60,7 @@ function VisitorForm({ onVisitorAdded }) {
         },
         body: JSON.stringify({
           ...formData,
-          idNumber: formData.idNumber || null,
+          idNumber: null, // לא נדרש יותר למילוי, שדה נשמר כ-null
           vehicleNumber: formData.vehicleNumber || null,
           entryGate: formData.entryGate || null,
         }),
@@ -84,7 +78,8 @@ function VisitorForm({ onVisitorAdded }) {
           escortPhone: '',
           arrivalMethod: '',
           vehicleNumber: '',
-          entryGate: ''
+          entryGate: '',
+          contractorIdNotice: false,
         })
         alert('המבקר נרשם בהצלחה!')
         onVisitorAdded()
@@ -120,18 +115,11 @@ function VisitorForm({ onVisitorAdded }) {
         </select>
       </div>
 
-      {showIdField && (
+      {formData.visitType === 'contractor' && (
         <div className="form-group">
-          <label htmlFor="idNumber">תעודת זהות *</label>
-          <input
-            type="text"
-            id="idNumber"
-            name="idNumber"
-            value={formData.idNumber}
-            onChange={handleChange}
-            required
-            placeholder="הזן תעודת זהות"
-          />
+          <div className="notice-warning">
+            לאישור סופי של הכנסת קבלן חד יומי יש לשלוח את מספר תעודת הזהות לאדמינית ולקבל אישור סופי במייל.
+          </div>
         </div>
       )}
 

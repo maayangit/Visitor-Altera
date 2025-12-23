@@ -6,7 +6,7 @@ import VisitorsTable from './components/VisitorsTable'
 function App() {
   const [visitors, setVisitors] = useState([])
   const [loading, setLoading] = useState(true)
-  const [activeView, setActiveView] = useState('list') // 'list' or 'form'
+  const [activeView, setActiveView] = useState(null) // null | 'list' | 'form'
 
   // Fetch visitors from API
   const fetchVisitors = async () => {
@@ -42,6 +42,9 @@ function App() {
   return (
     <div className="container">
       <header>
+        <div className="brand brand-top">
+          <img src="/logo.png" alt="לוגו אלטרה" className="logo" />
+        </div>
         <h1>מערכת ניהול מבקרים</h1>
         <p>אלטרה - בקרת ביטחון ואישור מבקרים</p>
 

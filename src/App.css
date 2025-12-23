@@ -6,35 +6,52 @@
 
 header {
     text-align: center;
-    color: white;
+    color: #0a1f63;
     margin-bottom: 30px;
     padding: 20px;
 }
 
 header h1 {
-    font-size: 2.5em;
-    margin-bottom: 10px;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    font-size: 2.4em;
+    margin-bottom: 6px;
 }
 
 header p {
-    font-size: 1.2em;
+    font-size: 1.1em;
     opacity: 0.9;
+}
+
+.brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.brand-top {
+    flex-direction: column;
+}
+
+.logo {
+    height: 56px;
+    object-fit: contain;
 }
 
 .view-toggle {
     margin-top: 16px;
     display: inline-flex;
     gap: 8px;
-    background: rgba(0, 0, 0, 0.15);
+    background: #e9eef8;
     padding: 4px;
     border-radius: 999px;
+    justify-content: center;
 }
 
 .toggle-btn {
     border: none;
     background: transparent;
-    color: #f3f3f3;
+    color: #0a1f63;
     padding: 8px 14px;
     border-radius: 999px;
     font-size: 0.95em;
@@ -44,14 +61,14 @@ header p {
 }
 
 .toggle-btn-active {
-    background: #ffffff;
-    color: #4b5bd6;
+    background: linear-gradient(135deg, #0a1f63 0%, #123a8c 100%);
+    color: #ffffff;
     transform: translateY(-1px);
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.18);
 }
 
 .toggle-btn:hover {
-    background: rgba(255, 255, 255, 0.15);
+    background: rgba(10, 31, 99, 0.08);
 }
 
 .content-wrapper {
@@ -75,15 +92,16 @@ header p {
     background: white;
     border-radius: 15px;
     padding: 30px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 8px 24px rgba(10, 31, 99, 0.12);
+    border: 1px solid #e6e9f0;
 }
 
 .form-section h2, .table-section h2 {
-    color: #333;
-    margin-bottom: 25px;
-    font-size: 1.8em;
-    border-bottom: 3px solid #667eea;
-    padding-bottom: 10px;
+    color: #0a1f63;
+    margin-bottom: 20px;
+    font-size: 1.7em;
+    border-bottom: 3px solid #123a8c;
+    padding-bottom: 8px;
 }
 
 .form-group {
@@ -102,28 +120,30 @@ header p {
 .form-group select {
     width: 100%;
     padding: 12px;
-    border: 2px solid #ddd;
+    border: 2px solid #d7dce8;
     border-radius: 8px;
     font-size: 1em;
-    transition: all 0.3s ease;
+    transition: all 0.2s ease;
     font-family: inherit;
+    background: #fdfdff;
 }
 
 .form-group input:focus,
 .form-group select:focus {
     outline: none;
-    border-color: #667eea;
-    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    border-color: #123a8c;
+    box-shadow: 0 0 0 3px rgba(18, 58, 140, 0.12);
+    background: #ffffff;
 }
 
 .submit-btn {
     width: 100%;
     padding: 15px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #0a1f63 0%, #123a8c 100%);
     color: white;
     border: none;
     border-radius: 8px;
-    font-size: 1.1em;
+    font-size: 1.05em;
     font-weight: 600;
     cursor: pointer;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
@@ -132,7 +152,7 @@ header p {
 
 .submit-btn:hover:not(:disabled) {
     transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+    box-shadow: 0 5px 15px rgba(10, 31, 99, 0.25);
 }
 
 .submit-btn:active:not(:disabled) {
@@ -157,7 +177,7 @@ table {
 }
 
 thead {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #0a1f63 0%, #123a8c 100%);
     color: white;
     position: sticky;
     top: 0;
@@ -224,7 +244,7 @@ tbody td {
     flex: 1;
     padding: 8px 10px;
     border-radius: 6px;
-    border: 1px solid #ccc;
+    border: 1px solid #d7dce8;
     font-size: 0.9em;
 }
 
@@ -232,14 +252,15 @@ tbody td {
     padding: 8px 12px;
     border-radius: 6px;
     border: none;
-    background: #4b5bd6;
+    background: linear-gradient(135deg, #0a1f63 0%, #123a8c 100%);
     color: white;
     font-size: 0.9em;
     cursor: pointer;
+    box-shadow: 0 4px 10px rgba(10, 31, 99, 0.22);
 }
 
 .admin-btn:hover {
-    background: #3a48ad;
+    background: #123a8c;
 }
 
 .visit-type-badge {
@@ -251,28 +272,28 @@ tbody td {
 }
 
 .visit-type-private {
-    background: #e8f5e9;
-    color: #2e7d32;
+    background: #e8f0ff;
+    color: #0a1f63;
 }
 
 .visit-type-business {
     background: #e3f2fd;
-    color: #1565c0;
+    color: #0f4b9a;
 }
 
 .visit-type-interview {
-    background: #fff3e0;
-    color: #e65100;
+    background: #fff5e6;
+    color: #c26a00;
 }
 
 .visit-type-contractor {
-    background: #f3e5f5;
-    color: #6a1b9a;
+    background: #f0e8ff;
+    color: #5a2ea6;
 }
 
 .visit-type-supplier {
-    background: #fce4ec;
-    color: #c2185b;
+    background: #fce9f2;
+    color: #ad205f;
 }
 
 .details-cell {
@@ -282,6 +303,16 @@ tbody td {
 
 .details-cell strong {
     color: #333;
+}
+
+.notice-warning {
+    color: #c62828;
+    background: #fdecea;
+    border: 1px solid #f5c6c3;
+    padding: 10px 12px;
+    border-radius: 8px;
+    font-size: 0.95em;
+    line-height: 1.5;
 }
 
 /* Scrollbar styling */
@@ -338,7 +369,7 @@ tbody tr {
     .form-section, .table-section {
         padding: 18px 16px;
         border-radius: 12px;
-        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
+        box-shadow: 0 6px 18px rgba(10, 31, 99, 0.16);
     }
 
     .form-group {

@@ -44,11 +44,6 @@ export default async function handler(req, res) {
         return res.status(400).json({ message: 'יש למלא את כל השדות הנדרשים' });
       }
 
-      // Validate contractor ID
-      if (visitType === 'contractor' && !idNumber) {
-        return res.status(400).json({ message: 'יש למלא תעודת זהות עבור קבלן חד יומי' });
-      }
-
       // Validate vehicle fields
       if (arrivalMethod === 'vehicle') {
         if (!vehicleNumber || !entryGate) {
