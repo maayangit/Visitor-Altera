@@ -7,15 +7,33 @@ function App() {
   const [visitors, setVisitors] = useState([])
   const [loading, setLoading] = useState(true)
   const [activeView, setActiveView] = useState(null) // null | 'list' | 'form'
+  const [viewAdminCode, setViewAdminCode] = useState('')
+  const [isViewAdmin, setIsViewAdmin] = useState(false)
+
+  // Check if view admin code is saved
+  useEffect(() => {
+    const saved = sessionStorage.getItem('viewAdminCode')
+    if (saved) {
+      setViewAdminCode(saved)
+      setIsViewAdmin(true)
+    }
+  }, [])
 
   // Fetch visitors from API
-  const fetchVisitors = async () => {
+  const fetchVisitors = async (adminToken) => {
     try {
       setLoading(true)
-      const response = await fetch('/api/visitors')
+      const response = await fetch('/api/visitors', {
+        headers: {
+          'x-view-admin-token': adminToken || ''
+        }
+      })
       if (response.ok) {
         const data = await response.json()
         setVisitors(data)
+      } else if (response.status === 403) {
+        setVisitors([])
+        alert('אין הרשאה לצפות ברשימת מבקרים. נא להזין קוד מנהל.')
       } else {
         console.error('Failed to fetch visitors')
       }
@@ -26,17 +44,34 @@ function App() {
     }
   }
 
-  useEffect(() => {
-    fetchVisitors()
-  }, [])
+  const handleViewList = () => {
+    if (!isViewAdmin) {
+      // Show admin code input
+      const code = prompt('יש להזין קוד מנהל לצפייה ברשימת מבקרים:')
+      if (code) {
+        setViewAdminCode(code)
+        setIsViewAdmin(true)
+        sessionStorage.setItem('viewAdminCode', code)
+        setActiveView('list')
+        fetchVisitors(code)
+      }
+    } else {
+      setActiveView('list')
+      fetchVisitors(viewAdminCode)
+    }
+  }
 
   const handleVisitorAdded = () => {
-    fetchVisitors()
-    setActiveView('list')
+    if (isViewAdmin) {
+      fetchVisitors(viewAdminCode)
+      setActiveView('list')
+    }
   }
 
   const handleVisitorDeleted = () => {
-    fetchVisitors()
+    if (isViewAdmin) {
+      fetchVisitors(viewAdminCode)
+    }
   }
 
   return (
@@ -59,7 +94,7 @@ function App() {
           <button
             type="button"
             className={`toggle-btn ${activeView === 'list' ? 'toggle-btn-active' : ''}`}
-            onClick={() => setActiveView('list')}
+            onClick={handleViewList}
           >
             הצג רשימת מבקרים
           </button>

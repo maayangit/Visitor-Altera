@@ -7,7 +7,7 @@ export default async function handler(req, res) {
   // Set CORS headers
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'DELETE, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, x-admin-token');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, x-delete-admin-token');
 
   if (req.method === 'OPTIONS') {
     return res.status(200).end();
@@ -15,7 +15,7 @@ export default async function handler(req, res) {
 
   try {
     if (req.method === 'DELETE') {
-      const adminToken = req.headers['x-admin-token'];
+      const adminToken = req.headers['x-delete-admin-token'];
       if (!process.env.ADMIN_TOKEN || adminToken !== process.env.ADMIN_TOKEN) {
         return res.status(403).json({ message: 'אין הרשאה למחוק רשומות' });
       }

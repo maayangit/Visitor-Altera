@@ -7,7 +7,7 @@ export default async function handler(req, res) {
   // Set CORS headers
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, DELETE, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, x-view-admin-token');
 
   if (req.method === 'OPTIONS') {
     return res.status(200).end();
@@ -15,6 +15,14 @@ export default async function handler(req, res) {
 
   try {
     if (req.method === 'GET') {
+      // Check admin token for viewing list
+      const viewToken = req.headers['x-view-admin-token'];
+      const requiredToken = process.env.VIEW_ADMIN_TOKEN;
+      
+      if (!viewToken || viewToken !== requiredToken) {
+        return res.status(403).json({ message: 'אין הרשאה לצפות ברשימת מבקרים. נא להזין קוד מנהל.' });
+      }
+
       // Get all visitors
       const visitors = await sqlClient`
         SELECT * FROM visitors 

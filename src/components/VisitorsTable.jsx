@@ -15,14 +15,14 @@ const gateLabels = {
 
 function VisitorsTable({ visitors, onVisitorDeleted }) {
   const [deletingId, setDeletingId] = useState(null)
-  const [adminCode, setAdminCode] = useState('')
-  const [isAdmin, setIsAdmin] = useState(false)
+  const [deleteAdminCode, setDeleteAdminCode] = useState('')
+  const [isDeleteAdmin, setIsDeleteAdmin] = useState(false)
 
   useEffect(() => {
-    const saved = sessionStorage.getItem('adminCode')
+    const saved = sessionStorage.getItem('deleteAdminCode')
     if (saved) {
-      setAdminCode(saved)
-      setIsAdmin(true)
+      setDeleteAdminCode(saved)
+      setIsDeleteAdmin(true)
     }
   }, [])
 
@@ -35,19 +35,18 @@ function VisitorsTable({ visitors, onVisitorDeleted }) {
     })
   }
 
-  const handleCheckAdmin = () => {
-    if (!adminCode) {
-      alert('יש להזין קוד מנהל')
+  const handleCheckDeleteAdmin = () => {
+    if (!deleteAdminCode) {
+      alert('יש להזין קוד מנהל למחיקה')
       return
     }
-    // במערכת אמיתית מומלץ לאמת מהשרת. כאן אנו בודקים רק בצד הלקוח
-    setIsAdmin(true)
-    sessionStorage.setItem('adminCode', adminCode)
+    setIsDeleteAdmin(true)
+    sessionStorage.setItem('deleteAdminCode', deleteAdminCode)
   }
 
   const handleDelete = async (id) => {
-    if (!isAdmin) {
-      alert('רק מנהלים יכולים למחוק רשומות. נא להזין קוד מנהל.')
+    if (!isDeleteAdmin) {
+      alert('רק מנהלים יכולים למחוק רשומות. נא להזין קוד מנהל למחיקה.')
       return
     }
 
@@ -60,7 +59,7 @@ function VisitorsTable({ visitors, onVisitorDeleted }) {
       const response = await fetch(`/api/visitors/${id}`, {
         method: 'DELETE',
         headers: {
-          'x-admin-token': adminCode,
+          'x-delete-admin-token': deleteAdminCode,
         },
       })
 
@@ -97,10 +96,10 @@ function VisitorsTable({ visitors, onVisitorDeleted }) {
           type="password"
           className="admin-input"
           placeholder="קוד מנהל למחיקת רשומות"
-          value={adminCode}
-          onChange={(e) => setAdminCode(e.target.value)}
+          value={deleteAdminCode}
+          onChange={(e) => setDeleteAdminCode(e.target.value)}
         />
-        <button type="button" className="admin-btn" onClick={handleCheckAdmin}>
+        <button type="button" className="admin-btn" onClick={handleCheckDeleteAdmin}>
           אישור
         </button>
       </div>
