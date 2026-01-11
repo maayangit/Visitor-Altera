@@ -1,22 +1,25 @@
 import { useState } from 'react'
-
-const visitTypeOptions = [
-  { value: 'private', label: 'אורח פרטי' },
-  { value: 'business', label: 'ביקור עסקי' },
-  { value: 'interview', label: 'ראיון עבודה' },
-  { value: 'contractor', label: 'קבלן חד יומי' },
-  { value: 'supplier', label: 'ספק' }
-]
-
-const gateOptions = [
-  { value: 'main', label: 'שער ראשי אינטל' },
-  { value: 'altera', label: 'שער דרום אלטרה' }
-]
+import { useLanguage } from '../LanguageContext'
 
 function VisitorForm({ onVisitorAdded }) {
+  const { t, language } = useLanguage()
+  
+  const visitTypeOptions = [
+    { value: 'private', label: t('visitType.private') },
+    { value: 'business', label: t('visitType.business') },
+    { value: 'interview', label: t('visitType.interview') },
+    { value: 'contractor', label: t('visitType.contractor') },
+    { value: 'supplier', label: t('visitType.supplier') }
+  ]
+
+  const gateOptions = [
+    { value: 'main', label: t('gate.main') },
+    { value: 'altera', label: t('gate.altera') }
+  ]
+
   const [formData, setFormData] = useState({
     visitType: '',
-    idNumber: '', // נשמר כ-null לשדה ה-DB הקיים
+    idNumber: '',
     visitDate: new Date().toISOString().split('T')[0],
     guestName: '',
     guestPhone: '',
@@ -25,7 +28,6 @@ function VisitorForm({ onVisitorAdded }) {
     arrivalMethod: '',
     vehicleNumber: '',
     entryGate: '',
-    contractorIdNotice: false, // נשמר אך לא מוצג (מוסרים את הצ'קבוקס)
   })
 
   const [submitting, setSubmitting] = useState(false)
@@ -33,10 +35,10 @@ function VisitorForm({ onVisitorAdded }) {
   const showVehicleFields = formData.arrivalMethod === 'vehicle'
 
   const handleChange = (e) => {
-    const { name, value, type, checked } = e.target
+    const { name, value } = e.target
     setFormData(prev => ({
       ...prev,
-      [name]: type === 'checkbox' ? checked : value
+      [name]: value
     }))
   }
 
@@ -45,7 +47,7 @@ function VisitorForm({ onVisitorAdded }) {
     
     if (formData.arrivalMethod === 'vehicle') {
       if (!formData.vehicleNumber || !formData.entryGate) {
-        alert('יש למלא את כל שדות הרכב')
+        alert(t('message.vehicleFields'))
         return
       }
     }
@@ -60,7 +62,7 @@ function VisitorForm({ onVisitorAdded }) {
         },
         body: JSON.stringify({
           ...formData,
-          idNumber: null, // לא נדרש יותר למילוי, שדה נשמר כ-null
+          idNumber: null,
           vehicleNumber: formData.vehicleNumber || null,
           entryGate: formData.entryGate || null,
         }),
@@ -78,18 +80,17 @@ function VisitorForm({ onVisitorAdded }) {
           escortPhone: '',
           arrivalMethod: '',
           vehicleNumber: '',
-          entryGate: '',
-          contractorIdNotice: false,
+          entryGate: ''
         })
-        alert('המבקר נרשם בהצלחה!')
+        alert(t('message.success'))
         onVisitorAdded()
       } else {
         const error = await response.json()
-        alert(`שגיאה: ${error.message || 'לא ניתן לשמור את המבקר'}`)
+        alert(`שגיאה: ${error.message || t('message.error')}`)
       }
     } catch (error) {
       console.error('Error submitting form:', error)
-      alert('שגיאה בשמירת המבקר. נסה שוב.')
+      alert(t('message.error'))
     } finally {
       setSubmitting(false)
     }
@@ -98,7 +99,7 @@ function VisitorForm({ onVisitorAdded }) {
   return (
     <form onSubmit={handleSubmit}>
       <div className="form-group">
-        <label htmlFor="visitType">סוג הביקור *</label>
+        <label htmlFor="visitType">{t('form.visitType')}</label>
         <select
           id="visitType"
           name="visitType"
@@ -106,7 +107,7 @@ function VisitorForm({ onVisitorAdded }) {
           onChange={handleChange}
           required
         >
-          <option value="">בחר סוג ביקור</option>
+          <option value="">{t('form.selectVisitType')}</option>
           {visitTypeOptions.map(option => (
             <option key={option.value} value={option.value}>
               {option.label}
@@ -118,13 +119,13 @@ function VisitorForm({ onVisitorAdded }) {
       {formData.visitType === 'contractor' && (
         <div className="form-group">
           <div className="notice-warning">
-            לאישור סופי של הכנסת קבלן חד יומי יש לשלוח את מספר תעודת הזהות לאדמינית ולקבל אישור סופי במייל.
+            {t('form.contractorNotice')}
           </div>
         </div>
       )}
 
       <div className="form-group">
-        <label htmlFor="visitDate">תאריך הביקור *</label>
+        <label htmlFor="visitDate">{t('form.visitDate')}</label>
         <input
           type="date"
           id="visitDate"
@@ -136,7 +137,7 @@ function VisitorForm({ onVisitorAdded }) {
       </div>
 
       <div className="form-group">
-        <label htmlFor="guestName">שם האורח *</label>
+        <label htmlFor="guestName">{t('form.guestName')}</label>
         <input
           type="text"
           id="guestName"
@@ -144,12 +145,12 @@ function VisitorForm({ onVisitorAdded }) {
           value={formData.guestName}
           onChange={handleChange}
           required
-          placeholder="הזן שם מלא"
+          placeholder={t('form.guestNamePlaceholder')}
         />
       </div>
 
       <div className="form-group">
-        <label htmlFor="guestPhone">טלפון האורח *</label>
+        <label htmlFor="guestPhone">{t('form.guestPhone')}</label>
         <input
           type="tel"
           id="guestPhone"
@@ -157,12 +158,12 @@ function VisitorForm({ onVisitorAdded }) {
           value={formData.guestPhone}
           onChange={handleChange}
           required
-          placeholder="הזן מספר טלפון"
+          placeholder={t('form.guestPhonePlaceholder')}
         />
       </div>
 
       <div className="form-group">
-        <label htmlFor="escortName">מי המלווה (שם העובד) *</label>
+        <label htmlFor="escortName">{t('form.escortName')}</label>
         <input
           type="text"
           id="escortName"
@@ -170,12 +171,12 @@ function VisitorForm({ onVisitorAdded }) {
           value={formData.escortName}
           onChange={handleChange}
           required
-          placeholder="הזן שם העובד המלווה"
+          placeholder={t('form.escortNamePlaceholder')}
         />
       </div>
 
       <div className="form-group">
-        <label htmlFor="escortPhone">טלפון המלווה *</label>
+        <label htmlFor="escortPhone">{t('form.escortPhone')}</label>
         <input
           type="tel"
           id="escortPhone"
@@ -183,12 +184,12 @@ function VisitorForm({ onVisitorAdded }) {
           value={formData.escortPhone}
           onChange={handleChange}
           required
-          placeholder="הזן מספר טלפון"
+          placeholder={t('form.escortPhonePlaceholder')}
         />
       </div>
 
       <div className="form-group">
-        <label htmlFor="arrivalMethod">באיזו דרך מגיע *</label>
+        <label htmlFor="arrivalMethod">{t('form.arrivalMethod')}</label>
         <select
           id="arrivalMethod"
           name="arrivalMethod"
@@ -196,16 +197,16 @@ function VisitorForm({ onVisitorAdded }) {
           onChange={handleChange}
           required
         >
-          <option value="">בחר דרך הגעה</option>
-          <option value="foot">רגלית</option>
-          <option value="vehicle">רכב</option>
+          <option value="">{t('form.selectArrival')}</option>
+          <option value="foot">{t('form.foot')}</option>
+          <option value="vehicle">{t('form.vehicle')}</option>
         </select>
       </div>
 
       {showVehicleFields && (
         <>
           <div className="form-group">
-            <label htmlFor="vehicleNumber">מספר רכב *</label>
+            <label htmlFor="vehicleNumber">{t('form.vehicleNumber')}</label>
             <input
               type="text"
               id="vehicleNumber"
@@ -213,12 +214,12 @@ function VisitorForm({ onVisitorAdded }) {
               value={formData.vehicleNumber}
               onChange={handleChange}
               required
-              placeholder="הזן מספר רכב"
+              placeholder={t('form.vehicleNumberPlaceholder')}
             />
           </div>
 
           <div className="form-group">
-            <label htmlFor="entryGate">מאיזה שער נכנס *</label>
+            <label htmlFor="entryGate">{t('form.entryGate')}</label>
             <select
               id="entryGate"
               name="entryGate"
@@ -226,7 +227,7 @@ function VisitorForm({ onVisitorAdded }) {
               onChange={handleChange}
               required
             >
-              <option value="">בחר שער כניסה</option>
+              <option value="">{t('form.selectGate')}</option>
               {gateOptions.map(option => (
                 <option key={option.value} value={option.value}>
                   {option.label}
@@ -238,12 +239,10 @@ function VisitorForm({ onVisitorAdded }) {
       )}
 
       <button type="submit" className="submit-btn" disabled={submitting}>
-        {submitting ? 'שומר...' : 'שמור מבקר'}
+        {submitting ? t('form.submitting') : t('form.submit')}
       </button>
     </form>
   )
 }
 
 export default VisitorForm
-
-

@@ -20,4 +20,8 @@ body {
     font-size: 1.2em;
 }
 
+[dir="ltr"] body {
+    direction: ltr;
+}
+
 

@@ -21,6 +21,45 @@ header p {
     opacity: 0.9;
 }
 
+.header-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    position: relative;
+    width: 100%;
+}
+
+.header-content > div {
+    flex: 1;
+}
+
+.language-toggle {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background: rgba(10, 31, 99, 0.1);
+    color: #0a1f63;
+    border: 2px solid rgba(10, 31, 99, 0.2);
+    padding: 8px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 0.9em;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+.language-toggle:hover {
+    background: rgba(10, 31, 99, 0.15);
+    border-color: rgba(10, 31, 99, 0.3);
+    transform: translateY(-1px);
+}
+
+[dir="ltr"] .language-toggle {
+    right: auto;
+    left: 0;
+}
+
 .brand {
     display: inline-flex;
     align-items: center;

@@ -1,22 +1,24 @@
 import { useState, useEffect } from 'react'
-
-const visitTypeLabels = {
-  'private': 'אורח פרטי',
-  'business': 'ביקור עסקי',
-  'interview': 'ראיון עבודה',
-  'contractor': 'קבלן חד יומי',
-  'supplier': 'ספק'
-}
-
-const gateLabels = {
-  'main': 'שער ראשי אינטל',
-  'altera': 'שער דרום אלטרה'
-}
+import { useLanguage } from '../LanguageContext'
 
 function VisitorsTable({ visitors, onVisitorDeleted }) {
+  const { t, language } = useLanguage()
   const [deletingId, setDeletingId] = useState(null)
   const [deleteAdminCode, setDeleteAdminCode] = useState('')
   const [isDeleteAdmin, setIsDeleteAdmin] = useState(false)
+
+  const visitTypeLabels = {
+    'private': t('visitType.private'),
+    'business': t('visitType.business'),
+    'interview': t('visitType.interview'),
+    'contractor': t('visitType.contractor'),
+    'supplier': t('visitType.supplier')
+  }
+
+  const gateLabels = {
+    'main': t('gate.main'),
+    'altera': t('gate.altera')
+  }
 
   useEffect(() => {
     const saved = sessionStorage.getItem('deleteAdminCode')
@@ -28,7 +30,7 @@ function VisitorsTable({ visitors, onVisitorDeleted }) {
 
   const formatDate = (dateString) => {
     const date = new Date(dateString)
-    return date.toLocaleDateString('he-IL', {
+    return date.toLocaleDateString(language === 'he' ? 'he-IL' : 'en-US', {
       year: 'numeric',
       month: '2-digit',
       day: '2-digit'
@@ -37,7 +39,7 @@ function VisitorsTable({ visitors, onVisitorDeleted }) {
 
   const handleCheckDeleteAdmin = () => {
     if (!deleteAdminCode) {
-      alert('יש להזין קוד מנהל למחיקה')
+      alert(t('admin.codeRequired'))
       return
     }
     setIsDeleteAdmin(true)
@@ -46,11 +48,11 @@ function VisitorsTable({ visitors, onVisitorDeleted }) {
 
   const handleDelete = async (id) => {
     if (!isDeleteAdmin) {
-      alert('רק מנהלים יכולים למחוק רשומות. נא להזין קוד מנהל למחיקה.')
+      alert(t('admin.deleteError'))
       return
     }
 
-    if (!window.confirm('האם אתה בטוח שברצונך למחוק את המבקר הזה?')) {
+    if (!window.confirm(t('admin.deleteConfirm'))) {
       return
     }
 
@@ -64,15 +66,15 @@ function VisitorsTable({ visitors, onVisitorDeleted }) {
       })
 
       if (response.status === 403) {
-        alert('קוד מנהל שגוי או חסר. אין הרשאה למחוק רשומות.')
+        alert(t('admin.deleteCodeError'))
       } else if (response.ok) {
         onVisitorDeleted()
       } else {
-        alert('שגיאה במחיקת המבקר')
+        alert(t('admin.deleteFailed'))
       }
     } catch (error) {
       console.error('Error deleting visitor:', error)
-      alert('שגיאה במחיקת המבקר')
+      alert(t('admin.deleteFailed'))
     } finally {
       setDeletingId(null)
     }
@@ -86,7 +88,7 @@ function VisitorsTable({ visitors, onVisitorDeleted }) {
   })
 
   if (sortedVisitors.length === 0) {
-    return <div className="no-data">אין מבקרים רשומים</div>
+    return <div className="no-data">{t('table.noData')}</div>
   }
 
   return (
@@ -95,25 +97,25 @@ function VisitorsTable({ visitors, onVisitorDeleted }) {
         <input
           type="password"
           className="admin-input"
-          placeholder="קוד מנהל למחיקת רשומות"
+          placeholder={t('table.adminCode')}
           value={deleteAdminCode}
           onChange={(e) => setDeleteAdminCode(e.target.value)}
         />
         <button type="button" className="admin-btn" onClick={handleCheckDeleteAdmin}>
-          אישור
+          {t('table.adminConfirm')}
         </button>
       </div>
       <table>
         <thead>
           <tr>
-            <th>תאריך</th>
-            <th>סוג ביקור</th>
-            <th>שם האורח</th>
-            <th>טלפון</th>
-            <th>המלווה</th>
-            <th>דרך הגעה</th>
-            <th>פרטים נוספים</th>
-            <th>פעולות</th>
+            <th>{t('table.date')}</th>
+            <th>{t('table.visitType')}</th>
+            <th>{t('table.guestName')}</th>
+            <th>{t('table.phone')}</th>
+            <th>{t('table.escort')}</th>
+            <th>{t('table.arrival')}</th>
+            <th>{t('table.details')}</th>
+            <th>{t('table.actions')}</th>
           </tr>
         </thead>
         <tbody>
@@ -123,14 +125,14 @@ function VisitorsTable({ visitors, onVisitorDeleted }) {
 
             let details = ''
             if (visitor.arrival_method === 'vehicle') {
-              details = `<strong>רכב:</strong> ${visitor.vehicle_number}<br>`
-              details += `<strong>שער:</strong> ${gateLabels[visitor.entry_gate] || visitor.entry_gate}`
+              details = `<strong>${t('table.vehicle')}:</strong> ${visitor.vehicle_number}<br>`
+              details += `<strong>${t('table.gate')}:</strong> ${gateLabels[visitor.entry_gate] || visitor.entry_gate}`
             } else {
-              details = 'רגלית'
+              details = t('form.foot')
             }
             if (visitor.id_number) {
               details += details ? '<br>' : ''
-              details += `<strong>ת.ז:</strong> ${visitor.id_number}`
+              details += `<strong>${t('table.idNumber')}:</strong> ${visitor.id_number}`
             }
 
             return (
@@ -148,7 +150,7 @@ function VisitorsTable({ visitors, onVisitorDeleted }) {
                   <br />
                   <small>{visitor.escort_phone}</small>
                 </td>
-                <td>{visitor.arrival_method === 'vehicle' ? 'רכב' : 'רגלית'}</td>
+                <td>{visitor.arrival_method === 'vehicle' ? t('form.vehicle') : t('form.foot')}</td>
                 <td className="details-cell" dangerouslySetInnerHTML={{ __html: details }} />
                 <td>
                   <button
@@ -156,7 +158,7 @@ function VisitorsTable({ visitors, onVisitorDeleted }) {
                     onClick={() => handleDelete(visitor.id)}
                     disabled={deletingId === visitor.id}
                   >
-                    {deletingId === visitor.id ? 'מוחק...' : 'מחק'}
+                    {deletingId === visitor.id ? t('table.deleting') : t('table.delete')}
                   </button>
                 </td>
               </tr>
@@ -169,5 +171,3 @@ function VisitorsTable({ visitors, onVisitorDeleted }) {
 }
 
 export default VisitorsTable
-
-
