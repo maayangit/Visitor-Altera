@@ -79,13 +79,9 @@ function AppContent() {
   return (
     <div className="container">
       <header>
-        <div className="brand brand-top">
-          <img src="/logo.png" alt="Altera Logo" className="logo" />
-        </div>
-        <div className="header-content">
-          <div>
-            <h1>{t('app.title')}</h1>
-            <p>{t('app.subtitle')}</p>
+        <div className="header-top">
+          <div className="brand brand-top">
+            <img src="/logo.png" alt="Altera Logo" className="logo" />
           </div>
           <button 
             type="button" 
@@ -95,6 +91,12 @@ function AppContent() {
           >
             {language === 'he' ? 'EN' : 'עב'}
           </button>
+        </div>
+        <div className="header-content">
+          <div>
+            <h1>{t('app.title')}</h1>
+            <p>{t('app.subtitle')}</p>
+          </div>
         </div>
 
         <div className="view-toggle">

@@ -11,6 +11,14 @@ header {
     padding: 20px;
 }
 
+.header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 15px;
+    position: relative;
+}
+
 header h1 {
     font-size: 2.4em;
     margin-bottom: 6px;
@@ -26,7 +34,6 @@ header p {
     justify-content: center;
     align-items: center;
     gap: 20px;
-    position: relative;
     width: 100%;
 }
 
@@ -35,9 +42,6 @@ header p {
 }
 
 .language-toggle {
-    position: absolute;
-    top: 0;
-    right: 0;
     background: rgba(10, 31, 99, 0.1);
     color: #0a1f63;
     border: 2px solid rgba(10, 31, 99, 0.2);
@@ -47,6 +51,8 @@ header p {
     font-size: 0.9em;
     font-weight: 600;
     transition: all 0.2s ease;
+    white-space: nowrap;
+    flex-shrink: 0;
 }
 
 .language-toggle:hover {
@@ -55,9 +61,8 @@ header p {
     transform: translateY(-1px);
 }
 
-[dir="ltr"] .language-toggle {
-    right: auto;
-    left: 0;
+[dir="ltr"] .header-top {
+    flex-direction: row-reverse;
 }
 
 .brand {
@@ -397,6 +402,15 @@ tbody tr {
         margin-bottom: 16px;
     }
 
+    .header-top {
+        margin-bottom: 12px;
+    }
+
+    .language-toggle {
+        padding: 6px 12px;
+        font-size: 0.85em;
+    }
+
     header h1 {
         font-size: 1.8em;
     }
@@ -454,6 +468,15 @@ tbody tr {
 
     header {
         padding: 12px 8px;
+    }
+
+    .header-top {
+        margin-bottom: 10px;
+    }
+
+    .language-toggle {
+        padding: 5px 10px;
+        font-size: 0.8em;
     }
 
     header h1 {
